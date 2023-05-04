@@ -7,11 +7,15 @@ import javax.swing.border.EmptyBorder;
 import java.awt.Color;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JTextField;
 import javax.swing.JSeparator;
 import java.awt.SystemColor;
+import java.awt.Toolkit;
 import java.awt.Font;
+import java.awt.Image;
+
 import javax.swing.JPasswordField;
 import javax.swing.SwingConstants;
 import java.awt.event.MouseAdapter;
@@ -28,7 +32,6 @@ public class Login extends JFrame {
 	private JTextField txtUsuario;
 	private JPasswordField txtContrasena;
 	int xMouse, yMouse;
-	private JLabel labelExit;
 
 	/**
 	 * Launch the application.
@@ -67,46 +70,74 @@ public class Login extends JFrame {
 		contentPane.add(panel);
 		panel.setLayout(null);
 		
+		JPanel header = new JPanel();
+		header.addMouseMotionListener(new MouseMotionAdapter() {
+			@Override
+			public void mouseDragged(MouseEvent e) {
+				headerMouseDragged(e);
+			     
+			}
+		});
+		header.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				headerMousePressed(e);
+			}
+		});
+		
 		JPanel panel_1 = new JPanel();
 		panel_1.setBackground(new Color(12, 138, 199));
 		panel_1.setBounds(484, 0, 304, 527);
 		panel.add(panel_1);
 		panel_1.setLayout(null);
 		
-		JLabel imgHotel = new JLabel("");
-		imgHotel.setBounds(0, 0, 304, 538);
-		panel_1.add(imgHotel);
-		imgHotel.setIcon(new ImageIcon(Login.class.getResource("/imagenes/img-hotel-login-.png")));
+		JLabel lblImg = new JLabel("");
+		lblImg.setVerticalAlignment(SwingConstants.BOTTOM);
+		lblImg.setIcon(new ImageIcon(Login.class.getResource("/imagenes/img-hotel-login-.png")));
+		lblImg.setHorizontalAlignment(SwingConstants.CENTER);
+		lblImg.setBounds(22, 47, 260, 449);
+		panel_1.add(lblImg);
+		header.setBackground(SystemColor.window);
+		header.setBounds(0, 0, 788, 36);
+		panel.add(header);
+		header.setLayout(null);
 		
+		/*
+		 * JPanel btnExit = new JPanel(); btnExit.setCursor(new
+		 * java.awt.Cursor(java.awt.Cursor.HAND_CURSOR)); btnExit.setBackground(new
+		 * Color(12, 138, 199)); btnExit.setBounds(743, 0, 45, 36); header.add(btnExit);
+		 */
 		JPanel btnexit = new JPanel();
-		btnexit.setBounds(251, 0, 53, 36);
-		panel_1.add(btnexit);
-		btnexit.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				System.exit(0);
-			}
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				btnexit.setBackground(Color.red);
-				labelExit.setForeground(Color.white);
-			}			
-			@Override
-			public void mouseExited(MouseEvent e) {
-				 btnexit.setBackground(new Color(12, 138, 199));
-			     labelExit.setForeground(Color.white);
-			}
-		});
-		btnexit.setBackground(new Color(12, 138, 199));
 		btnexit.setLayout(null);
 		btnexit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+		btnexit.setBackground(Color.WHITE);
+		btnexit.setBounds(743, 0, 45, 36);
+		header.add(btnexit);
 		
-		labelExit = new JLabel("X");
-		labelExit.setBounds(0, 0, 53, 36);
-		btnexit.add(labelExit);
-		labelExit.setForeground(SystemColor.text);
+		JLabel labelExit = new JLabel("X");
+		labelExit.setBounds(0, 0, 45, 36);		
+		labelExit.setHorizontalAlignment(SwingConstants.CENTER);
 		labelExit.setFont(new Font("Roboto", Font.PLAIN, 18));
-		labelExit.setHorizontalAlignment(SwingConstants.CENTER);		
+		btnexit.add(labelExit);
+		btnexit.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnexit.setBackground(Color.RED);
+				labelExit.setForeground(Color.WHITE);
+						
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnexit.setBackground(new Color(12,138,199));
+				
+			}
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				MenuPrincipal menu = new MenuPrincipal();
+				menu.setVisible(true);
+				dispose();
+			}
+		});
 		
 		txtUsuario = new JTextField();
 		txtUsuario.addMouseListener(new MouseAdapter() {
@@ -214,24 +245,12 @@ public class Login extends JFrame {
 		lblNewLabel_1.setBounds(65, 65, 48, 59);
 		panel.add(lblNewLabel_1);
 		
-		JPanel header = new JPanel();
-		header.addMouseMotionListener(new MouseMotionAdapter() {
-			@Override
-			public void mouseDragged(MouseEvent e) {
-				headerMouseDragged(e);
-			     
-			}
-		});
-		header.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mousePressed(MouseEvent e) {
-				headerMousePressed(e);
-			}
-		});
-		header.setBackground(SystemColor.window);
-		header.setBounds(0, 0, 784, 36);
-		panel.add(header);
-		header.setLayout(null);
+		/*
+		 * JLabel lblExit = new JLabel("X"); lblExit.setBounds(743, 0, 45, 36);
+		 * btnExit.add(lblExit); lblExit.setFont(new Font("Roboto", Font.BOLD, 14));
+		 * lblExit.setForeground(Color.WHITE);
+		 * lblExit.setHorizontalAlignment(SwingConstants.CENTER);
+		 */
 	}
 	
 	private void Login() {

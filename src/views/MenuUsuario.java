@@ -87,6 +87,7 @@ public class MenuUsuario extends JFrame {
 		lblNewLabel_2.setIcon(new ImageIcon(MenuUsuario.class.getResource("/imagenes/aH-150px.png")));
 		
 		JPanel btnRegistro = new JPanel();
+		btnRegistro.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 		btnRegistro.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -103,20 +104,21 @@ public class MenuUsuario extends JFrame {
 				dispose();
 			}
 		});
-		btnRegistro.setBounds(0, 255, 257, 56);
+		btnRegistro.setBounds(0, 330, 257, 56);
 		btnRegistro.setBackground(new Color(12, 138, 199));
 		panelMenu.add(btnRegistro);
 		btnRegistro.setLayout(null);
 		
 		labelRegistro = new JLabel("Registro de reservas");
+		labelRegistro.setBounds(0, 11, 257, 34);
+		btnRegistro.add(labelRegistro);
 		labelRegistro.setIcon(new ImageIcon(MenuUsuario.class.getResource("/imagenes/reservado.png")));
 		labelRegistro.setForeground(SystemColor.text);
-		labelRegistro.setBounds(25, 11, 205, 34);
 		labelRegistro.setFont(new Font("Roboto", Font.PLAIN, 18));
-		labelRegistro.setHorizontalAlignment(SwingConstants.LEFT);
-		btnRegistro.add(labelRegistro);
+		labelRegistro.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		JPanel btnBusqueda = new JPanel();
+		btnBusqueda.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 		btnBusqueda.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -133,28 +135,62 @@ public class MenuUsuario extends JFrame {
 				dispose();
 			}
 		});
-		btnBusqueda.setBounds(0, 312, 257, 56);
+		btnBusqueda.setBounds(0, 385, 257, 56);
 		btnBusqueda.setBackground(new Color(12, 138, 199));
 		panelMenu.add(btnBusqueda);
 		btnBusqueda.setLayout(null);
 		
 		JLabel lblBusquedaDeReservas = new JLabel("Búsqueda");
+		lblBusquedaDeReservas.setBounds(0, 11, 257, 34);
+		btnBusqueda.add(lblBusquedaDeReservas);
 		lblBusquedaDeReservas.setIcon(new ImageIcon(MenuUsuario.class.getResource("/imagenes/pessoas.png")));
-		lblBusquedaDeReservas.setBounds(27, 11, 200, 34);
-		lblBusquedaDeReservas.setHorizontalAlignment(SwingConstants.LEFT);
+		lblBusquedaDeReservas.setHorizontalAlignment(SwingConstants.CENTER);
 		lblBusquedaDeReservas.setForeground(Color.WHITE);
 		lblBusquedaDeReservas.setFont(new Font("Roboto", Font.PLAIN, 18));
-		btnBusqueda.add(lblBusquedaDeReservas);
 		
 		JSeparator separator = new JSeparator();
 		separator.setBounds(26, 219, 201, 2);
 		panelMenu.add(separator);
+		
+		JPanel btnRegistroHuesped = new JPanel();
+		btnRegistroHuesped.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+		btnRegistroHuesped.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				RegistroHuesped registroHuesped = new RegistroHuesped(0);
+				registroHuesped.setVisible(true);
+				dispose();
+				
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnRegistroHuesped.setBackground(new Color(118, 187, 223));	
+				
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnRegistroHuesped.setBackground(new Color(12, 138, 199));	
+			}
+		});
+		btnRegistroHuesped.setLayout(null);
+		btnRegistroHuesped.setBackground(new Color(12, 138, 199));
+		btnRegistroHuesped.setBounds(0, 273, 257, 56);
+		panelMenu.add(btnRegistroHuesped);
+		
+		JLabel lblRegistroDeHuespedes = new JLabel("Registro de huespedes\r\n");
+		lblRegistroDeHuespedes.setIcon(new ImageIcon(MenuUsuario.class.getResource("/imagenes/persona.png")));
+		lblRegistroDeHuespedes.setHorizontalAlignment(SwingConstants.CENTER);
+		lblRegistroDeHuespedes.setForeground(Color.WHITE);
+		lblRegistroDeHuespedes.setFont(new Font("Roboto", Font.PLAIN, 18));
+		lblRegistroDeHuespedes.setBounds(0, 11, 257, 34);
+		btnRegistroHuesped.add(lblRegistroDeHuespedes);
 		header.setLayout(null);
 		header.setBackground(Color.WHITE);
 		header.setBounds(0, 0, 944, 36);
 		contentPane.add(header);
 		
 		JPanel btnexit = new JPanel();
+		btnexit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 		btnexit.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {

@@ -7,6 +7,11 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JTextField;
 import java.awt.Color;
 import com.toedter.calendar.JDateChooser;
+
+import controller.HuespedController;
+import controller.ReservasContoller;
+import model.Huespedes;
+
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JLabel;
@@ -19,11 +24,14 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.sql.Date;
 import java.text.Format;
 import java.awt.event.ActionEvent;
 import java.awt.Toolkit;
 import javax.swing.SwingConstants;
 import javax.swing.JSeparator;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 @SuppressWarnings("serial")
 public class RegistroHuesped extends JFrame {
@@ -35,9 +43,11 @@ public class RegistroHuesped extends JFrame {
 	private JTextField txtNreserva;
 	private JDateChooser txtFechaN;
 	private JComboBox<Format> txtNacionalidad;
-	private JLabel labelExit;
 	private JLabel labelAtras;
 	int xMouse, yMouse;
+	private HuespedController controller;
+	private Huespedes huespedes;
+	private ReservasContoller contollerReservas;
 
 	/**
 	 * Launch the application.
@@ -46,7 +56,7 @@ public class RegistroHuesped extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					RegistroHuesped frame = new RegistroHuesped();
+					RegistroHuesped frame = new RegistroHuesped(0);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -58,7 +68,10 @@ public class RegistroHuesped extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public RegistroHuesped() {
+	public RegistroHuesped(int idReserva) {
+		
+		this.controller = new HuespedController();
+		this.contollerReservas = new ReservasContoller();
 		
 		setIconImage(Toolkit.getDefaultToolkit().getImage(RegistroHuesped.class.getResource("/imagenes/lOGO-50PX.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -93,11 +106,12 @@ public class RegistroHuesped extends JFrame {
 		contentPane.add(header);
 		
 		JPanel btnAtras = new JPanel();
+		btnAtras.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 		btnAtras.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				ReservasView reservas = new ReservasView();
-				reservas.setVisible(true);
+				MenuUsuario menu = new MenuUsuario();
+				menu.setVisible(true);
 				dispose();				
 			}
 			@Override
@@ -123,8 +137,59 @@ public class RegistroHuesped extends JFrame {
 		labelAtras.setBounds(0, 0, 53, 36);
 		btnAtras.add(labelAtras);
 		
+		JPanel btnexit = new JPanel();
+		btnexit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+		
+		JLabel labelExit = new JLabel("X");
+		labelExit.setFont(new Font("Roboto", Font.PLAIN, 23));
+		labelExit.setHorizontalAlignment(SwingConstants.CENTER);
+		labelExit.setBounds(0, 0, 53, 36);
+		btnexit.add(labelExit);
+		
+		btnexit.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				dispose();
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnexit.setBackground(Color.red);
+				labelExit.setForeground(Color.WHITE);
+				
+				
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				btnexit.setBackground(Color.WHITE);
+				labelExit.setForeground(Color.BLACK);
+				
+			}
+		});
+		
+		btnexit.setLayout(null);
+		btnexit.setBackground(Color.WHITE);
+		btnexit.setBounds(857, 0, 53, 36);
+		header.add(btnexit);
+		
+		
+		
 		
 		txtNombre = new JTextField();
+		txtNombre.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				
+			    int key = e.getKeyChar();
+
+		        boolean mayusculas = key >= 65 && key <= 90;
+		        boolean minisculas = key >= 97 && key <= 122;
+		        boolean espacio = key == 32;
+
+		        if (!(mayusculas || minisculas || espacio)) {
+		            e.consume();
+		        }
+			}
+		});
 		txtNombre.setFont(new Font("Roboto", Font.PLAIN, 16));
 		txtNombre.setBounds(560, 135, 285, 33);
 		txtNombre.setBackground(Color.WHITE);
@@ -133,6 +198,21 @@ public class RegistroHuesped extends JFrame {
 		contentPane.add(txtNombre);
 		
 		txtApellido = new JTextField();
+		txtApellido.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				  int key = e.getKeyChar();
+
+			        boolean mayusculas = key >= 65 && key <= 90;
+			        boolean minisculas = key >= 97 && key <= 122;
+			        boolean espacio = key == 32;
+
+			        if (!(mayusculas || minisculas || espacio)) {
+			            e.consume();
+			        }
+			}
+			
+		});
 		txtApellido.setFont(new Font("Roboto", Font.PLAIN, 16));
 		txtApellido.setBounds(560, 204, 285, 33);
 		txtApellido.setColumns(10);
@@ -185,6 +265,21 @@ public class RegistroHuesped extends JFrame {
 		contentPane.add(lblTelefono);
 		
 		txtTelefono = new JTextField();
+		txtTelefono.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				 int key = e.getKeyChar();
+
+			        boolean numeros = key >= 48 && key <= 57;
+
+			        if (!numeros) {
+			            e.consume();
+			        }
+			        if (txtTelefono.getText().length() >= 10) {
+			            e.consume();
+			        }
+			}
+		});
 		txtTelefono.setFont(new Font("Roboto", Font.PLAIN, 16));
 		txtTelefono.setBounds(560, 424, 285, 33);
 		txtTelefono.setColumns(10);
@@ -193,7 +288,7 @@ public class RegistroHuesped extends JFrame {
 		contentPane.add(txtTelefono);
 		
 		JLabel lblTitulo = new JLabel("REGISTRO HUÉSPED");
-		lblTitulo.setBounds(606, 55, 234, 42);
+		lblTitulo.setBounds(581, 47, 264, 42);
 		lblTitulo.setForeground(new Color(12, 138, 199));
 		lblTitulo.setFont(new Font("Roboto Black", Font.PLAIN, 23));
 		contentPane.add(lblTitulo);
@@ -210,6 +305,9 @@ public class RegistroHuesped extends JFrame {
 		txtNreserva.setColumns(10);
 		txtNreserva.setBackground(Color.WHITE);
 		txtNreserva.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+		String id = String.valueOf(idReserva);
+		txtNreserva.setText(id);
+		
 		contentPane.add(txtNreserva);
 		
 		JSeparator separator_1_2 = new JSeparator();
@@ -253,6 +351,7 @@ public class RegistroHuesped extends JFrame {
 		btnguardar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				guardar();
 			}
 		});
 		btnguardar.setLayout(null);
@@ -283,36 +382,6 @@ public class RegistroHuesped extends JFrame {
 		panel.add(logo);
 		logo.setIcon(new ImageIcon(RegistroHuesped.class.getResource("/imagenes/Ha-100px.png")));
 		
-		JPanel btnexit = new JPanel();
-		btnexit.setBounds(857, 0, 53, 36);
-		contentPane.add(btnexit);
-		btnexit.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				MenuPrincipal principal = new MenuPrincipal();
-				principal.setVisible(true);
-				dispose();
-			}
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				btnexit.setBackground(Color.red);
-				labelExit.setForeground(Color.white);
-			}			
-			@Override
-			public void mouseExited(MouseEvent e) {
-				 btnexit.setBackground(Color.white);
-			     labelExit.setForeground(Color.black);
-			}
-		});
-		btnexit.setLayout(null);
-		btnexit.setBackground(Color.white);
-		
-		labelExit = new JLabel("X");
-		labelExit.setBounds(0, 0, 53, 36);
-		btnexit.add(labelExit);
-		labelExit.setHorizontalAlignment(SwingConstants.CENTER);
-		labelExit.setForeground(SystemColor.black);
-		labelExit.setFont(new Font("Roboto", Font.PLAIN, 18));
 	}
 	
 	
@@ -327,5 +396,44 @@ public class RegistroHuesped extends JFrame {
 	        int y = evt.getYOnScreen();
 	        this.setLocation(x - xMouse, y - yMouse);
 }
-											
+	    
+	    public void guardar(){
+	    	
+	    	String fecha = ((JTextField)txtFechaN.getDateEditor().getUiComponent()).getText();
+	    	
+	    	if(txtNombre.getText().equals("") || txtApellido.getText().equals("") || txtFechaN.getDate()!=null ||txtNacionalidad.getSelectedItem().equals("afgano-afgana") || txtTelefono.getText().equals("") ||txtNreserva.getText().equals("") ) {
+	    		
+	    		var huespedes = new Huespedes(
+	    				txtNombre.getText(),
+	    				txtApellido.getText(),
+	    				Date.valueOf(fecha),
+	    				txtNacionalidad.getSelectedItem().toString(),
+	    				txtTelefono.getText(),
+	    				Integer.parseInt(txtNreserva.getText())
+	    				);
+	    		
+	    		this.controller.guardar(huespedes);
+	    		
+	    		JOptionPane.showMessageDialog(this, "Registro Exitoso");
+	    		
+	    		limpiar();
+	    		
+	    		
+	    		
+	    	}else {
+	    		JOptionPane.showMessageDialog(this, "Todos los campos son requeridos.");
+	    	}
+	    	
+	    }
+	    
+		private void limpiar() {
+			// TODO Auto-generated method stub
+			txtNombre.setText("");
+			txtApellido.setText("");
+			txtFechaN.setDate(null);
+			txtNacionalidad.setSelectedIndex(0);
+			txtTelefono.setText("");
+			txtNreserva.setText("");
+			
+		}
 }
